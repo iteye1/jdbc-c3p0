@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.4" 
+	xmlns="http://java.sun.com/xml/ns/j2ee" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee 
+	http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
+	<!--  - - - - - - - - - - - - - - - - - - - -  -->
+	<description>
+	Demonstrate use of Commons-Pool and Commons-DBCP in a webapp
+	to replace container-provided, JNDI-located DataSources.
+	</description>
+
+	<display-name>Pool/DBCP Test</display-name>
+	<!--  - - - - - - - - - - - - - - - - - - - -  -->
+
+	<context-param>
+		<description>Path to "get data" servlet mapping</description>
+		<param-name>jdbc_pool.mapping.get_data</param-name>
+		<param-value>/get_data.test</param-value>
+	</context-param>
+
+	<context-param>
+		<description>Path to "put data" servlet mapping</description>
+		<param-name>jdbc_pool.mapping.put_data</param-name>
+		<param-value>/put_data.test</param-value>
+	</context-param>
+
+	<context-param>
+		<description>appwide config file</description>
+		<param-name>jdbc_pool.mapping.app_config_file</param-name>
+		<param-value>app-config.properties</param-value>
+	</context-param>
+
+	<context-param>
+		<description>DB config file</description>
+		<param-name>jdbc_pool.mapping.db_config_file</param-name>
+		<param-value>jdbc-config.propertie</param-value>
+	</context-param>
+
+	<!--  - - - - - - - - - - - - - - - - - - - -  -->
+	<listener>
+		<listener-class>jdbc_pool.webapp.SetupAppConfigContextListener</listener-class>
+	</listener>
+
+	<listener>
+		<listener-class>jdbc_pool.webapp.SetupDataSourceContextListener</listener-class>
+	</listener>
+
+	<listener>
+		<listener-class>jdbc_pool.webapp.SetupDBContextListener</listener-class>
+	</listener>
+
+	<!--  - - - - - - - - - - - - - - - - - - - -  -->
+
+	<servlet>
+		<servlet-name>GetData</servlet-name>
+		<servlet-class>jdbc_pool.webapp.GetDataServlet</servlet-class>
+
+		<init-param>
+			<description>context-relative success page</description>
+			<param-name>dispatch.success</param-name>
+			<param-value>/get_success.jsp</param-value>
+		</init-param>
+
+		<init-param>
+			<description>context-relative error page</description>
+			<param-name>dispatch.failure</param-name>
+			<param-value>/error.jsp</param-value>
+		</init-param>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>GetData</servlet-name>
+		<url-pattern>/get_data.test</url-pattern>
+	</servlet-mapping>
+
+	<!--  - - - - - - - - - - - - - - - - - - - -  -->
+	<servlet>
+		<servlet-name>PutData</servlet-name>
+		<servlet-class>jdbc_pool.webapp.PutDataServlet</servlet-class>
+
+		<init-param>
+			<description>context-relative success page</description>
+			<param-name>dispatch.success</param-name>
+			<param-value>/put_success.jsp</param-value>
+		</init-param>
+
+		<init-param>
+			<description>context-relative error page</description>
+			<param-name>dispatch.failure</param-name>
+			<param-value>/error.jsp</param-value>
+		</init-param>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>PutData</servlet-name>
+		<url-pattern>/put_data.test</url-pattern>
+	</servlet-mapping>
+
+	<!--  - - - - - - - - - - - - - - - - - - - -  -->
+</web-app>
